@@ -1,2 +1,2 @@
 # improved-system
-Linux Bash 
+Scripts Related above tech
