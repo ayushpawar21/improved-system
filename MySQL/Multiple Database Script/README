@@ -1,0 +1,7 @@
+Bash script that can be used to backup multiple MySQL databases, and also display the progress in percentage:
+
+This script uses the mysqldump command to backup the databases, pv command to show the progress of the backup in percentage and gzip to compress the backup file. It also uses the mysql command to get the list of databases and to calculate the total size of the database.
+
+You can schedule this script to run automatically using cron in order to have a regular backup.
+
+Please make sure to set the correct path for the backup directory and the correct MySQL credentials in the script before running it.
