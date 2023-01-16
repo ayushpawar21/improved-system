@@ -1,0 +1,39 @@
+---
+- name: Change DNS entries in hosts file
+  hosts: all
+  become: true
+  gather_facts: no
+  vars:
+    dns_entries:
+      - { ip: "1.1.1.1", hostname: "example1.com" }
+      - { ip: "2.2.2.2", hostname: "example2.com" }
+
+  tasks:
+  - name: Backup the hosts file
+    copy:
+      src: /etc/hosts
+      dest: /etc/hosts.bak
+      remote_src: true
+      backup: yes
+
+  - name: Remove existing DNS entries
+    lineinfile:
+      path: /etc/hosts
+      state: absent
+      regexp: "{{ item.ip }} {{ item.hostname }}"
+    with_items: "{{ dns_entries }}"
+
+  - name: Add new DNS entries
+    lineinfile:
+      path: /etc/hosts
+      state: present
+      line: "{{ item.ip }} {{ item.hostname }}"
+    with_items: "{{ dns_entries }}"
+
+  - name: Verify the contents of the hosts file
+    command: cat /etc/hosts
+    register: hosts_file_content
+
+  - name: Debug the contents of the hosts file
+    debug:
+      var: hosts_file_content
